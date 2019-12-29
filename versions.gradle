@@ -1,0 +1,17 @@
+ext {
+    p6spyVersion = "1.5.8"
+    oauth2Version = '2.1.7.RELEASE'
+    guavaVersion = '28.1-jre'
+    mariadbVersion = '2.4.3'
+    jasyptVersion = '3.0.0'
+}
+
+dependencyManagement {
+    dependencies {
+        dependency "com.github.gavlyukovskiy:p6spy-spring-boot-starter:${p6spyVersion}"
+        dependency "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:${oauth2Version}"
+        dependency "com.google.guava:guava:${guavaVersion}"
+        dependency "org.mariadb.jdbc:mariadb-java-client:${mariadbVersion}"
+        dependency "com.github.ulisesbocchio:jasypt-spring-boot:${jasyptVersion}"
+    }
+}

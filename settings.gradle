@@ -1,0 +1,3 @@
+rootProject.name = 'springboot-best-practice'
+include 'server'
+

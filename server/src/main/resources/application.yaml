@@ -1,0 +1,98 @@
+############################
+# Common properties
+############################
+
+## Server
+server:
+  port: 3000
+
+## Logging
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        security: debug
+
+## Jasypt
+jasypt:
+  encryptor:
+    bean: propertiesStringEncryptor
+
+
+## Application
+app:
+  clientId: application
+  clientSecret: "{bcrypt}$2a$10$WQhhT1/bIcZThZqEEQbWzO/umNXc.pHYPoX4pep9yB8fzfN8siMw2"
+  users:
+    - email: admin@gmail.com
+      password: admin
+      roles: ADMIN,USER
+      address:
+        city: seoul
+        street: st1
+        zipCode: 123
+    - email: user1@gmail.com
+      password: user1
+      roles: USER
+      address:
+        city: seoul
+        street: st2
+        zipCode: 521
+    - email: user2@gmail.com
+      password: user2
+      roles: USER
+      address:
+        city: seoul
+        street: st3
+        zipCode: 1234
+
+
+---
+
+############################
+# Local stage
+############################
+spring:
+  profiles: local
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
+---
+
+############################
+# Development stage
+############################
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mariadb://192.168.79.130:3306/testdb?useSSL=false&useUnicode=true&characterEncoding=utf8&seLegacyDatetimeCode=false
+    username: ENC(qPrUYQPVlQhMxxkkm/eKyg==)
+    password: ENC(qPrUYQPVlQhMxxkkm/eKyg==)
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      jdbc-url: jdbc:mariadb://192.168.79.130:3306/testdb
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+        dialect: org.hibernate.dialect.MariaDBDialect
