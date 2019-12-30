@@ -28,12 +28,16 @@ app:
     - email: admin@gmail.com
       password: admin
       roles: ADMIN,USER
+      firstName: zac
+      secondName: kim
       address:
         city: seoul
         street: st1
         zipCode: 123
     - email: user1@gmail.com
       password: user1
+      firstName: gildong
+      secondName: ha
       roles: USER
       address:
         city: seoul
@@ -41,12 +45,13 @@ app:
         zipCode: 521
     - email: user2@gmail.com
       password: user2
+      firstName: best
+      secondName: park
       roles: USER
       address:
         city: seoul
         street: st3
         zipCode: 1234
-
 
 ---
 

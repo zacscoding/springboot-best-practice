@@ -29,6 +29,10 @@ public class MemberDto {
     @NotEmpty
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
     private Set<MemberRole> roles;
 
     private Address address;
@@ -49,6 +53,8 @@ public class MemberDto {
                           .add("id", id)
                           .add("email", email)
                           .add("password", "[PROTECTED]")
+                          .add("firstName", firstName)
+                          .add("lastName", lastName)
                           .add("roles", roles)
                           .add("address", address)
                           .toString();

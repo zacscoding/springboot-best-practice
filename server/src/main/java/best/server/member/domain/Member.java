@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import best.server.common.domain.Address;
+import best.server.common.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @ToString
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -38,6 +39,10 @@ public class Member {
 
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
     @Embedded
     private Address address;
 
@@ -48,13 +53,18 @@ public class Member {
     /**
      * Returns a {@link Member} given params
      */
-    public static Member createMember(String email, String password, Set<MemberRole> roles, Address address) {
-        return new Member(email, password, roles, address);
+    public static Member createMember(String email, String password, String firstName, String lastName,
+                                      Set<MemberRole> roles, Address address) {
+
+        return new Member(email, password, firstName, lastName, address, roles);
     }
 
-    private Member(String email, String password, Set<MemberRole> roles, Address address) {
+    private Member(String email, String password, String firstName, String lastName,
+                   Address address, Set<MemberRole> roles) {
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.roles = roles;
     }

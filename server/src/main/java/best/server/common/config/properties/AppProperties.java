@@ -22,6 +22,8 @@ public class AppProperties {
     public static class User {
         private String email;
         private String password;
+        private String firstName;
+        private String secondName;
         private List<MemberRole> roles;
         private Addr address;
     }

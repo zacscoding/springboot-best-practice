@@ -8,9 +8,15 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
 
+import best.server.common.exception.handler.ApiExceptionHandler;
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableResourceServer
+@RequiredArgsConstructor
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+    private final ApiExceptionHandler exceptionHandler;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -30,6 +36,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                         .authenticated()
                     .and()
                 .exceptionHandling()
-                    .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+                    .authenticationEntryPoint(exceptionHandler)
+                    .accessDeniedHandler(exceptionHandler);
+                    //.accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
 }

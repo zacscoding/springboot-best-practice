@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AppConfiguration {
 
+    /**
+     * Initialize database for tests
+     */
     @Bean
     public ApplicationRunner applicationRunner() {
         return new ApplicationRunner() {
@@ -42,6 +45,7 @@ public class AppConfiguration {
                                                                   user.getAddress().getZipCode());
 
                     final Member member = Member.createMember(user.getEmail(), user.getPassword(),
+                                                              user.getFirstName(), user.getSecondName(),
                                                               new HashSet<>(user.getRoles()), address);
 
                     try {

@@ -20,6 +20,8 @@ public class MemberAssembler {
                         .id(member.getId())
                         .email(member.getEmail())
                         .password(member.getPassword())
+                        .firstName(member.getFirstName())
+                        .lastName(member.getLastName())
                         .roles(member.getRoles())
                         .address(member.getAddress())
                         .build();
@@ -30,6 +32,7 @@ public class MemberAssembler {
      */
     public static Member toEntity(MemberDto memberDto) {
         return Member.createMember(memberDto.getEmail(), memberDto.getPassword(),
+                                   memberDto.getFirstName(), memberDto.getLastName(),
                                    memberDto.getRoles(), memberDto.getAddress());
     }
 
