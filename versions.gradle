@@ -4,6 +4,8 @@ ext {
     guavaVersion = '28.1-jre'
     mariadbVersion = '2.4.3'
     jasyptVersion = '3.0.0'
+    modelmapperVersion = '2.3.1'
+    gsonVersion = '2.8.6'
 }
 
 dependencyManagement {
@@ -13,5 +15,7 @@ dependencyManagement {
         dependency "com.google.guava:guava:${guavaVersion}"
         dependency "org.mariadb.jdbc:mariadb-java-client:${mariadbVersion}"
         dependency "com.github.ulisesbocchio:jasypt-spring-boot:${jasyptVersion}"
+        dependency "org.modelmapper:modelmapper:${modelmapperVersion}"
+        dependency "com.google.code.gson:gson:${gsonVersion}"
     }
 }

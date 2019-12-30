@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Getter
-public enum CommonApiCode {
+public enum ApiErrorCode {
 
     // Success
     SUCCESS(200, "", ""),
@@ -25,7 +25,7 @@ public enum CommonApiCode {
     private final String code;
     private final String message;
 
-    CommonApiCode(int status, String code, String message) {
+    ApiErrorCode(int status, String code, String message) {
         this.status = status;
         this.code = code;
         this.message = message;

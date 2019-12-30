@@ -1,11 +1,11 @@
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
+plugins {
+    id "org.asciidoctor.convert" version "1.5.9.2"
 }
 
 dependencies {
     // spring
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -23,14 +23,20 @@ dependencies {
     // jasypt
     compile 'com.github.ulisesbocchio:jasypt-spring-boot'
 
+    // model mapper
+    compile 'org.modelmapper:modelmapper'
+
+    // gson
+    compile "com.google.code.gson:gson"
+
     // test
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    // testImplementation 'org.springframework.security:spring-security-test'
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE"
+    testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
-test {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 asciidoctor {
@@ -38,14 +44,15 @@ asciidoctor {
     dependsOn test
 }
 
-bootRun {
-    // jvm options
-    if (project.hasProperty('jvmArgs')) {
-        jvmArgs project.jvmArgs.split('\\s+')
-    }
+test {
+    exclude 'best/server/console/**'
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
 
-    // arguments
-    if (project.hasProperty('args')) {
-        args project.args.split('\\s+')
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
     }
 }

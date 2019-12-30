@@ -28,8 +28,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import best.server.common.response.ApiFieldError;
-import best.server.common.response.CommonApiCode;
-import best.server.common.response.CommonApiResponse;
+import best.server.common.response.ApiErrorCode;
+import best.server.common.response.ApiErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +50,7 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * - {@link HttpMessageConverter}'s binding error occur
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleMethodArgumentNotValidException(
+    protected ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
         logger.warn("handleMethodArgumentNotValidException : {}", e.getMessage());
 
@@ -63,7 +63,7 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * - {@link ModelAttribute}'s binding error
      */
     @ExceptionHandler(BindException.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleBindException(BindException e) {
+    protected ResponseEntity<ApiErrorResponse> handleBindException(BindException e) {
         logger.warn("handleBindException : {}", e.getMessage());
 
         return createBadRequestResponse(e.getBindingResult());
@@ -75,16 +75,16 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * - if enum's type is mismatched
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleMethodArgumentTypeMismatchException(
+    protected ResponseEntity<ApiErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException e) {
 
         logger.warn("handleMethodArgumentTypeMismatchException : {}", e.getMessage());
 
         final String value = e.getValue() == null ? "" : e.getValue().toString();
-        final CommonApiResponse<Void> response =
-                CommonApiResponse.createException(CommonApiCode.BAD_REQUEST,
-                                                  ApiFieldError.of(e.getName(), value,
-                                                                   e.getErrorCode()));
+        final ApiErrorResponse response =
+                ApiErrorResponse.createException(ApiErrorCode.BAD_REQUEST,
+                                                 ApiFieldError.of(e.getName(), value,
+                                                                  e.getErrorCode()));
 
         return ResponseEntity.badRequest().body(response);
     }
@@ -93,7 +93,7 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * handle {@link HttpMessageConversionException}
      */
     @ExceptionHandler(HttpMessageConversionException.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleHttpMessageConversionException(
+    protected ResponseEntity<ApiErrorResponse> handleHttpMessageConversionException(
             HttpMessageConversionException e) {
 
         logger.warn("handleHttpMessageConversionException : {}", e.getMessage());
@@ -107,12 +107,12 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * - not supported http method
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleHttpRequestMethodNotSupportedException(
+    protected ResponseEntity<ApiErrorResponse> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
 
         logger.warn("handleHttpRequestMethodNotSupportedException : {}", e.getMessage());
 
-        return new ResponseEntity<>(CommonApiResponse.createException(CommonApiCode.METHOD_NOT_ALLOWED),
+        return new ResponseEntity<>(ApiErrorResponse.createException(ApiErrorCode.METHOD_NOT_ALLOWED),
                                     HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -126,7 +126,7 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
         logger.warn("handleAccessDeniedException : {}", accessDeniedException.getMessage());
 
         final String jsonResponse = objectMapper.writeValueAsString(
-                CommonApiResponse.createException(CommonApiCode.FORBIDDEN));
+                ApiErrorResponse.createException(ApiErrorCode.FORBIDDEN));
 
         response.setStatus(403);
         response.setContentType("application/json;charset=UTF-8");
@@ -142,7 +142,7 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
                          AuthenticationException e) throws IOException, ServletException {
 
         final String jsonResponse = objectMapper.writeValueAsString(
-                CommonApiResponse.createException(CommonApiCode.UNAUTHORIZED));
+                ApiErrorResponse.createException(ApiErrorCode.UNAUTHORIZED));
 
         httpServletResponse.setStatus(401);
         httpServletResponse.setContentType("application/json;charset=UTF-8");
@@ -155,17 +155,17 @@ public class ApiExceptionHandler implements AuthenticationEntryPoint, AccessDeni
      * handle {@link Exception}
      */
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<CommonApiResponse<Void>> handleException(Exception e) {
+    protected ResponseEntity<ApiErrorResponse> handleException(Exception e) {
         logger.warn("handleException", e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(CommonApiResponse.createException(CommonApiCode.INTERNAL_SERVER_ERROR));
+                             .body(ApiErrorResponse.createException(ApiErrorCode.INTERNAL_SERVER_ERROR));
     }
 
     // ============ private
 
-    private ResponseEntity<CommonApiResponse<Void>> createBadRequestResponse(final BindingResult result) {
+    private ResponseEntity<ApiErrorResponse> createBadRequestResponse(final BindingResult result) {
         return ResponseEntity.badRequest()
-                             .body(CommonApiResponse.createException(CommonApiCode.BAD_REQUEST, result));
+                             .body(ApiErrorResponse.createException(ApiErrorCode.BAD_REQUEST, result));
     }
 }

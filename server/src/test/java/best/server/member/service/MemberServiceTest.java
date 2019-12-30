@@ -93,6 +93,5 @@ public class MemberServiceTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 }
